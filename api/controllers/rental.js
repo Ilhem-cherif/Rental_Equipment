@@ -122,7 +122,9 @@ const calculateTotalHours = (from, to) => {
 export const getRentalById = async (req, res, next) => {
   try {
     const rentalId = req.params.rentalid;
-    const rental = await Rental.findById(rentalId);
+    const rental = await Rental.findById(rentalId)
+                                .populate('user')
+                                .populate('product');
     if (!rental) {
       return next(createError(404, 'Rental not found'));
     }
@@ -131,6 +133,7 @@ export const getRentalById = async (req, res, next) => {
     next(err);
   }
 };
+
 
 export const getAllRentals = async (req, res, next) => {
   try {

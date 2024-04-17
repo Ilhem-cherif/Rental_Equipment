@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 const bookingSchema = new mongoose.Schema({
   product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   bookedTimeSlots: {
     from: { type: String, required: true },
     to: { type: String, required: true }

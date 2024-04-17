@@ -20,6 +20,7 @@ const SingleRental = () => {
     const fetchRentalData = async () => {
       try {
         const response = await axios.get(`/rental/${rentalId}`);
+        console.log("Fetched rental data:", response.data); // Debugging
         setRentalData(response.data);
         setEditedReturned(response.data.returned ? "Yes" : "No");
         setEditedRented(response.data.rented ? "Yes" : "No");
@@ -83,33 +84,46 @@ const SingleRental = () => {
         <Navbar />
         <div className="top">
           <div className="left">
-            {!editMode && (
-              <>
-                <div className="editButton" onClick={handleEdit}>
-                  Edit
-                </div>
-                <h1 className="title">Rental Information</h1>
-                {rentalData && (
-                  <div className="item">
-                    <div className="details">
-                      {rentalColumns.map((column) => (
-                        <div key={column.field} className="detailItem">
-                          <span className="itemKey">{column.headerName}:</span>
-                          {column.field === "returned" ? (
-                            <span className="itemValue">{rentalData.returned ? "Yes" : "No"}</span>
-                          ) : column.field === "rented" ? (
-                            <span className="itemValue">{rentalData.rented ? "Yes" : "No"}</span>
-                          ) : (
-                            <span className="itemValue">{rentalData[column.field]}</span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {error && <div className="error">{error}</div>}
-              </>
-            )}
+          {!editMode && (
+  <>
+    <div className="editButton" onClick={handleEdit}>
+      Edit
+    </div>
+    <h1 className="title">Rental Information</h1>
+    {rentalData && (
+        <div className="item">
+          <div className="details">
+          {rentalColumns.map((column) => (
+  <div key={column.field} className="detailItem">
+    <span className="itemKey">{column.headerName}:</span>
+    <span className="itemValue">
+      {column.field === "product" ? (
+        <span>{rentalData.product ? rentalData.product.Title : 'N/A'}</span>
+      ) : column.field === "useremail" ? (
+        <span>{rentalData.user ? rentalData.user.email : 'N/A'}</span>
+      ) : column.field === "user" ? (
+        <span>{rentalData.user ? rentalData.user.username : 'N/A'}</span>
+      ) : column.field === "returned" || column.field === "rented" ? (
+        <span>{rentalData[column.field] ? "Yes" : "No"}</span>
+      ) : column.field === "from" || column.field === "to" ? (
+        <span>{rentalData.bookedTimeSlots ? new Date(rentalData.bookedTimeSlots[column.field]).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) : 'N/A'}</span>
+      ) : (
+        <span>{rentalData[column.field]}</span>
+      )}
+    </span>
+  </div>
+))}
+
+
+
+        </div>
+      </div>
+    )}
+    {error && <div className="error">{error}</div>}
+  </>
+)}
+
+
             {editMode && (
               <div className="editForm">
                 <div className="editFormItem">
